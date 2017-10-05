@@ -2,7 +2,7 @@ open tigerlex
 open tigergrm
 open tigerescap
 open tigerseman
-open ej1
+open tigerpp
 open BasicIO Nonstdio
 
 fun lexstream(is: instream) =
@@ -31,8 +31,9 @@ fun main(args) =
 		val _ = findEscape(expr)
 		val _ = if arbol then tigerpp.exprAst expr else ()
 	in
-        print (Int.toString (cantplus expr));
-		(* transProg(expr); *)
+        (* print (Int.toString (cantplus expr));*)
+		
+        transProg(expr);
 		print "yes!!\n"
 	end	handle Fail s => print("Fail: "^s^"\n")
 

@@ -1,0 +1,1 @@
+Podemos asignar a:=i con i iterador de for, y a tendra tipo TInt RO en vez de TInt RW.

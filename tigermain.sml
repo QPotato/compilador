@@ -3,6 +3,7 @@ open tigergrm
 open tigerescap
 open tigerseman
 open tigerpp
+open tigerframe
 open BasicIO Nonstdio
 
 fun lexstream(is: instream) =
@@ -29,12 +30,19 @@ fun main(args) =
 		val lexbuf = lexstream entrada
 		val expr = prog Tok lexbuf handle _ => errParsing lexbuf
 		val _ = findEscape(expr)
-		val _ = if arbol then tigerpp.exprAst expr else ()
-	in
+
+        fun ppfrag (PROC {body, frame}) = "\n\n#BODY: \n"^tigerit.tree body
+        |   ppfrag (STRING (l, s)) = "\n\n#STRING: "^l^" :: "^s^"\n"
+
+        val _ = if arbol then tigerpp.exprAst expr else ()
+	    (* val intermes = map ppfrag (tigertrans.getResult()) *)
+   in
         (* print (Int.toString (cantplus expr));*)
 		
         transProg(expr);
+        map print (map ppfrag (tigertrans.getResult())); 
 		print "yes!!\n"
+
 	end	handle Fail s => print("Fail: "^s^"\n")
 
 val _ = main(CommandLine.arguments())

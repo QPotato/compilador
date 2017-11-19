@@ -232,7 +232,7 @@ and ppTipo TUnit = "()"
  |  ppTipo (TRecord (l, _)) = "{" ^ ppRecordList l ^ "}"
  |  ppTipo (TTipo s) = "¿" ^ s ^ "?"
 
-fun ppEnvEntry (Var {ty}) = "var " ^ (ppTipo ty)
+fun ppEnvEntry (Var {ty, ...}) = "var " ^ (ppTipo ty)
  |  ppEnvEntry (Func {label, formals, result, ...}) = 
     "fun " ^ label ^ " :: " ^ printArgs formals ^ ppTipo result
  

@@ -78,6 +78,7 @@ fun tiposIguales (TRecord _) TNil = true
 			tiposIguales a b
 		end *)
         raise Fail "No deberia pasar! (compara TTipo en tiposiguales)"
+  | tiposIguales (TInt _) (TInt _) = true
   | tiposIguales a b = (a=b)
 
 
@@ -254,8 +255,8 @@ fun transExp(venv : (string, EnvEntry) Tabla, tenv) =
 		| trexp(WhileExp({test, body}, nl)) =
 			let
 				val {exp = exptest, ty = tytest} = trexp test
-				val {exp = expbody, ty = tybody} = trexp body
                 val _ = preWhileForExp()
+				val {exp = expbody, ty = tybody} = trexp body
                 val exp = whileExp{test = exptest, body = expbody}
                 val _ = postWhileForExp() 
 			in
@@ -275,10 +276,15 @@ fun transExp(venv : (string, EnvEntry) Tabla, tenv) =
 
                  val forVar = varDec(acc)
 
+                 val _ = preWhileForExp()
+                 
                  val {exp=expbody, ty=tybody} = transExp (venv', tenv) body
                  val _ = if tybody = TUnit then () else error("el body no puede devolver un valor", nl)
+                 val fexp = forExp {lo = explo, hi = exphi, var = forVar, body = expbody}
 
-             in {exp = forExp {lo = explo, hi = exphi, var = forVar, body = expbody}, ty = TUnit} end
+                 val _ = postWhileForExp()
+
+             in {exp = fexp, ty = TUnit} end
 		| trexp(LetExp({decs, body}, _)) =
 			let
 			    (* Este fold como devuelve en el tercer valor las traducciones de todas las declaraciones *)
@@ -444,6 +450,7 @@ fun transExp(venv : (string, EnvEntry) Tabla, tenv) =
                         else error("definiste dos tipos con el mismo nombre en un batch, pavo", List.hd ps')
 
                 val tenv' = fijaTipos ts' tenv handle Ciclo => error("tipos mutuamente recursivos", List.hd ps')
+                                               | NoExiste => error("tipo inexistente en la declaracion", List.hd ps')
 			in (venv, tenv', []) end 
 	in trexp end
 

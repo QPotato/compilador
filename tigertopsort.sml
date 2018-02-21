@@ -12,6 +12,7 @@ fun l -- e = List.filter (op<> rs e) l
 fun fst(x, _) = x and snd(_, y) = y
 fun lp --- e = List.filter ((op<> rs e) o fst) lp
 exception Ciclo
+exception NoExiste
 
 (* P: pares.  E: elementos.
 St: Stack de no tratados.
@@ -92,7 +93,7 @@ fun fijaNONE [] env = env
 	| SOME ras => (ar := ras; fijaNONE t env))
 | fijaNONE((name, TRecord(lf, u))::t) env =
 	let	fun busNONE(s, ar as (ref(TTipo t)), _) =
-			(ar := tabSaca(t, env) handle _ => raise noExiste)
+			(ar := tabSaca(t, env) handle _ => raise NoExiste)
 		| busNONE _ = ()
 		val _ = List.app busNONE lf
 	in	fijaNONE t env end

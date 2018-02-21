@@ -19,11 +19,14 @@ fun getActualLev() = !actualLevel
 
 val outermost: level = {parent=NONE,
 	frame=newFrame{name="_tigermain", formals=[]}, level=getActualLev()}
+
 fun newLevel{parent={parent, frame, level}, name, formals} =
 	{
-	parent=SOME frame,
-	frame=newFrame{name=name, formals=formals},
-	level=level+1}
+	    parent=SOME frame,
+	    frame=newFrame{name=name, formals=formals},
+	    level=level+1
+    }
+
 fun allocArg{parent, frame, level} b = tigerframe.allocArg frame b
 fun allocLocal{parent, frame, level} b = tigerframe.allocLocal frame b
 fun formals{parent, frame, level} = tigerframe.formals frame
@@ -259,8 +262,7 @@ fun preWhileForExp() = pushSalida(SOME(newlabel()))
 
 fun postWhileForExp() = (popSalida(); ())
 
-(* PREGUNTAR POR QUE MIERDA TOMA UN LEVEL *)
-fun whileExp {test: exp, body: exp(*, lev:level*)} =
+fun whileExp {test: exp, body: exp} =
 let
 	val cf = unCx test
 	val expb = unNx body

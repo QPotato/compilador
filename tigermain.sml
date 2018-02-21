@@ -40,7 +40,7 @@ fun main(args) =
         (* print (Int.toString (cantplus expr));*)
 		
         transProg(expr);
-        map print (map ppfrag (tigertrans.getResult())); 
+        (* map print (map ppfrag (tigertrans.getResult())); *)
 		print "yes!!\n"
 
 	end	handle Fail s => print("Fail: "^s^"\n")
